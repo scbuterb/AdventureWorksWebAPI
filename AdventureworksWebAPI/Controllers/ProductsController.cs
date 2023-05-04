@@ -4,8 +4,6 @@ using WebApplication2.Models;
 
 namespace WebApplication2.Controllers
 {
-   
-
     [Route("api/[controller]")]
     [ApiController]
     public class ProductsController : ControllerBase
@@ -20,10 +18,7 @@ namespace WebApplication2.Controllers
         [HttpGet]
         public List<Product> GetProducts()
         {
-           return _context.Products.ToList();
+            return _context.Products.ToList();
         }
-
-        //[HttpPost]
-        //public 
     }
 }
