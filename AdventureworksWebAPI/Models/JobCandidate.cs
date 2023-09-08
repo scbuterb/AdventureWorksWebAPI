@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WebApplication2.Models;
+namespace AdventureWorksWebAPI.Models;
 
 /// <summary>
 /// Résumés submitted to Human Resources by job applicants.

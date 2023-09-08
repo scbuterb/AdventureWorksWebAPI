@@ -1,4 +1,4 @@
-namespace WebApplication2.Models
+namespace AdventureWorksWebAPI.Models
 {
     public class WeatherForecast
     {

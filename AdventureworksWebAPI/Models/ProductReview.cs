@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WebApplication2.Models;
+namespace AdventureWorksWebAPI.Models;
 
 /// <summary>
 /// Customer reviews of products they have purchased.

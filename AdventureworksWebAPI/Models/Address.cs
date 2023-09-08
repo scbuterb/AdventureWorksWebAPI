@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
-namespace WebApplication2.Models;
+namespace AdventureWorksWebAPI.Models;
 
 /// <summary>
 /// Street address information for customers, employees, and vendors.
@@ -48,10 +49,13 @@ public partial class Address
     /// </summary>
     public DateTime ModifiedDate { get; set; }
 
+    [JsonIgnore]
     public virtual ICollection<BusinessEntityAddress> BusinessEntityAddresses { get; set; } = new List<BusinessEntityAddress>();
 
+    [JsonIgnore]
     public virtual ICollection<SalesOrderHeader> SalesOrderHeaderBillToAddresses { get; set; } = new List<SalesOrderHeader>();
 
+    [JsonIgnore]
     public virtual ICollection<SalesOrderHeader> SalesOrderHeaderShipToAddresses { get; set; } = new List<SalesOrderHeader>();
 
     public virtual StateProvince StateProvince { get; set; } = null!;

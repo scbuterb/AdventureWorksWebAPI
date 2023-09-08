@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace WebApplication2.Models;
+namespace AdventureWorksWebAPI.Models;
 
 public partial class AdventureWorks2019Context : DbContext
 {

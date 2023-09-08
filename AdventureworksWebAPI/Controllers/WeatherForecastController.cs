@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using WebApplication2.Models;
+using AdventureWorksWebAPI.Models;
 
-namespace WebApplication2.Controllers
+namespace AdventureWorksWebAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]
