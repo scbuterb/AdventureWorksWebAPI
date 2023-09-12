@@ -7,4 +7,6 @@ Test .net Core WebAPI service to access test data in the AdventureWorks database
 <br />
 <br />
 <br />
+  ![image](https://github.com/scbuterb/AdventureWorksWebAPI/assets/28163137/be34e688-6489-4277-88b7-5af3cb645637)
+
 </div>
