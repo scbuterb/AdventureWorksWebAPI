@@ -12,7 +12,6 @@ namespace AdventureWorksWebAPI.Controllers
     public class AddressController : ControllerBase
     {
         private readonly AdventureWorks2019Context _context;
-
         public AddressController(AdventureWorks2019Context context)
         {
             this._context = context;
@@ -47,31 +46,35 @@ namespace AdventureWorksWebAPI.Controllers
         [Description("GetAddressByBusinessEntityContactId")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Address))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult GetAddressByBusinessEntityContactId(int businessEntityId, int personId)
+        public async Task<IActionResult> GetAddressByBusinessEntityContactId(int businessEntityId, int personId)
         {
-            Address address = null;
-            List<BusinessEntityContact> businessEntityContacts = _context.BusinessEntityContacts.Where
-                (f =>
-                f.BusinessEntityId == businessEntityId &&
-                f.PersonId == personId).ToList();
-            if (businessEntityContacts != null && businessEntityContacts.Count > 0)
+            Address? address = null;
+            BusinessEntityContact businessEntityContact =
+                await _context.BusinessEntityContacts.Where
+                (f => f.BusinessEntityId == businessEntityId &&
+                f.PersonId == personId
+                )
+                .FirstOrDefaultAsync();
+
+            if (businessEntityContact != null)
             {
                 List<BusinessEntityAddress> businessEntityAddresses =
-                                    _context.BusinessEntityAddresses.Where(
-                                        f => f.BusinessEntityId == businessEntityId && f.AddressTypeId == 3).ToList();
+                    await _context.BusinessEntityAddresses.Where(
+                                        f => f.BusinessEntityId == businessEntityId
+                                        && f.AddressTypeId == 3
+                                        ).ToListAsync();
                 if (businessEntityAddresses != null && businessEntityAddresses.Count > 0)
                 {
                     address = _context.Addresses.Find(businessEntityAddresses[0].AddressId);
                     if (address != null && address.StateProvinceId != 0)
                     {
-                        address.StateProvince = (StateProvince)_context.StateProvinces.Find(address.StateProvinceId);
+                        address.StateProvince = _context.StateProvinces.FindAsync(address.StateProvinceId).GetAwaiter().GetResult();
                     }
                 }
             }
 
             return address == null ? NotFound() : Ok(address);
         }
-
 
         /// <summary>
         /// Returns list of all Address Types
@@ -83,7 +86,7 @@ namespace AdventureWorksWebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetAddressTypes()
         {
-            var addressTypes = await _context.AddressTypes.ToListAsync();
+            List<AddressType> addressTypes = await _context.AddressTypes.ToListAsync();
             return addressTypes == null ? NotFound() : Ok(addressTypes);
         }
     }
