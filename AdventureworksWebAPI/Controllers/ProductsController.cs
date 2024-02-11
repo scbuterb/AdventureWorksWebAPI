@@ -68,5 +68,19 @@ namespace AdventureWorksWebAPI.Controllers
             return productList == null ? NotFound() : Ok( productList);
           
         }
+
+        [HttpGet]
+        [Description("GetProductItemByID")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProductList))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult GetProductItemByID(int? id)
+        {
+            FormattableString sqlProcString = $"dbo.usp_GetProductByID {id}";
+
+            var product = _context.Products.FromSql<Product>(sqlProcString).ToList();
+
+            return product == null ? NotFound() : Ok(product);
+
+        }
     }
 }
