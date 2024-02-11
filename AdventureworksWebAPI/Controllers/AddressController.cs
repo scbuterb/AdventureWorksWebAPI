@@ -7,7 +7,7 @@ using System.ComponentModel;
 
 namespace AdventureWorksWebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class AddressController : ControllerBase
     {
@@ -88,6 +88,6 @@ namespace AdventureWorksWebAPI.Controllers
         {
             List<AddressType> addressTypes = await _context.AddressTypes.ToListAsync();
             return addressTypes == null ? NotFound() : Ok(addressTypes);
-        }
+        }      
     }
 }
