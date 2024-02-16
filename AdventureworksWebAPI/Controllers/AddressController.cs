@@ -26,7 +26,7 @@ namespace AdventureWorksWebAPI.Controllers
         [EndpointDescription("GetAddressById")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Address))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetAddressByID(int addressId)
+        public async Task<IActionResult> GetAddressById(int addressId)
         {
             var address = await _context.Addresses.FindAsync(addressId);
             if (address != null && address.StateProvinceId != 0)
@@ -88,6 +88,24 @@ namespace AdventureWorksWebAPI.Controllers
         {
             List<AddressType> addressTypes = await _context.AddressTypes.ToListAsync();
             return addressTypes == null ? NotFound() : Ok(addressTypes);
-        }      
+        }
+
+        [HttpGet]
+        [Description("GetAddresses")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Address))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetAddresses()
+        {
+           
+            if (_context.Addresses != null)
+            {
+                List<Address> addresses = await _context.Addresses
+                .Include(a => a.StateProvince).Take(100).ToListAsync();
+                return addresses == null ? NotFound() : Ok(addresses);
+            }
+
+            return NotFound();
+
+        }
     }
 }
