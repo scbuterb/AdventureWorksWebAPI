@@ -90,13 +90,16 @@ namespace AdventureWorksWebAPI.Controllers
             return addressTypes == null ? NotFound() : Ok(addressTypes);
         }
 
+        /// <summary>
+        /// Returns list of top 100 address records.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Description("GetAddresses")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(Address))]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetAddresses()
-        {
-           
+        {         
             if (_context.Addresses != null)
             {
                 List<Address> addresses = await _context.Addresses
@@ -105,7 +108,6 @@ namespace AdventureWorksWebAPI.Controllers
             }
 
             return NotFound();
-
         }
     }
 }

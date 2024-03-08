@@ -22,12 +22,12 @@ namespace AdventureWorksWebAPI.Controllers
         /// This gets a lot of products.
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
-        [Description("GetProducts")]
-        public List<Product> GetProducts()
-        {
-            return _context.Products.ToList();
-        }
+        //[HttpGet]
+        //[Description("GetProducts")]
+        //public List<Product> GetProducts()
+        //{
+        //    return _context.Products.ToList();
+        //}
 
         [HttpGet("{productId}")]
         [Description("GetProduct")]
@@ -47,6 +47,7 @@ namespace AdventureWorksWebAPI.Controllers
         [Consumes("application/json")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddProduct([FromBody] Product product)
         {
             _context.Products.Add(product);
@@ -81,6 +82,89 @@ namespace AdventureWorksWebAPI.Controllers
 
             return product == null ? NotFound() : Ok(product);
 
+        }
+
+        [HttpGet]
+        [Description("GetProductCategories")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<ProductCategory>))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult GetProductCategories()
+        {
+            try
+            {
+                var productCategories = _context.ProductCategories.ToList();
+                return productCategories == null ? NotFound() : Ok(productCategories);
+            }
+            catch (Exception ex)
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpGet]
+        [Description("GetProductSubCategoriesByCategoryId")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<ProductSubcategory>))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult GetProductSubCategoriesByCategoryId(int? categoryId)
+        {
+            if (categoryId == null) { return NotFound(); }
+
+            try
+            {
+                var productCategories = _context.ProductSubcategories.Where(s=> s.ProductCategoryId == categoryId.Value).ToList();
+                return productCategories == null ? NotFound() : Ok(productCategories);
+            }
+            catch (Exception ex)
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpGet]
+        [Description("GetProductsBySubCategory")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Product>))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult GetProductsBySubCategory(int? subCategoryId)
+        {
+            if (subCategoryId == null) { return NotFound(); }
+            try
+            {
+                var products = _context.Products
+                    .Include(p => p.ProductProductPhotos)
+                    .ThenInclude(q => q.ProductPhoto)
+                    .Where(f => f.ProductSubcategoryId == subCategoryId.Value
+                    && f.ListPrice > 0);
+             
+                return products == null ? NotFound() : Ok(products);
+            }
+            catch(Exception ex)
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpGet]
+        [Description("GetProducts")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<Product>))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult GetProducts()
+        {
+           
+            try
+            {
+                var products = _context.Products
+                    .Include(p => p.ProductProductPhotos)
+                    .ThenInclude(q => q.ProductPhoto)                   
+                    .Where(f => f.ListPrice > 0)
+                    .Take(100)
+                    .ToList();
+
+                return products == null ? NotFound() : Ok(products);
+            }
+            catch (Exception ex)
+            {
+                return NotFound();
+            }
         }
     }
 }
