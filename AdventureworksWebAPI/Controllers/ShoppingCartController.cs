@@ -24,12 +24,12 @@ namespace AdventureWorksWebAPI.Controllers
         {
             List<ShoppingCartItem> shoppingCartItems = _context.ShoppingCartItems
                                                         .Include(p => p.Product)
+                                                            .ThenInclude(ph => ph.ProductProductPhotos)
+                                                            .ThenInclude(s => s.ProductPhoto)
                                                         .Where(f => f.ShoppingCartId == shoppingCartID)
                                                         .ToList();
 
             return shoppingCartItems == null ? NotFound() : Ok(shoppingCartItems);
         }
-
-         
     }
 }
