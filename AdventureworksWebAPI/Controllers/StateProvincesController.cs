@@ -29,7 +29,7 @@ namespace AdventureWorksWebAPI.Controllers
         {
             List<StateProvince> stateProvinces = await _context.StateProvinces.ToListAsync();
             return stateProvinces == null ? NotFound() : Ok(stateProvinces);
-        }
+        } 
 
     }
 }
