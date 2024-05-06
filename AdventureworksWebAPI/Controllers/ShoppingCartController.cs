@@ -31,5 +31,64 @@ namespace AdventureWorksWebAPI.Controllers
 
             return shoppingCartItems == null ? NotFound() : Ok(shoppingCartItems);
         }
+
+        [HttpPost("ShoppingCartItem")]
+
+        public IActionResult PostNewShoppingCartItem(string? shoppingCartID, int productID, int? quantity)
+        {
+            try
+            {
+                string cartId = string.Empty;
+                if (string.IsNullOrWhiteSpace(shoppingCartID))
+                {
+                    cartId = CreateNewShoppingCart();
+                }
+                else
+                {
+                    cartId = shoppingCartID;
+                }
+
+                int itemQuantity = quantity ?? 1;
+
+                ShoppingCartItem _item = new ShoppingCartItem()
+                {
+                    ShoppingCartId = cartId,                   
+                    DateCreated = DateTime.Now,
+                    Quantity = itemQuantity,
+                    ProductId = productID
+                };
+
+                _context.ShoppingCartItems.Add(_item);
+                _context.SaveChangesAsync();
+
+                return Ok(cartId);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+       
+        private string CreateNewShoppingCart()
+        {
+            try
+            {
+                var newShoppingCartID = Guid.NewGuid().ToString();
+                _context.ShoppingCarts.AddAsync(new ShoppingCart()
+                {
+                    ShoppingCartId = newShoppingCartID,
+                    DateCreated = DateTime.Now
+                });
+
+                _context.SaveChanges();
+
+                return newShoppingCartID;
+            }
+            catch (Exception ex)
+            {
+                return null!;
+            }
+        }
     }
 }
