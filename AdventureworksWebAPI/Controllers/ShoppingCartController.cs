@@ -32,9 +32,9 @@ namespace AdventureWorksWebAPI.Controllers
             return shoppingCartItems == null ? NotFound() : Ok(shoppingCartItems);
         }
 
-        [HttpPost("ShoppingCartItem")]
+        [HttpPost(Name = "ShoppingCartItem")]
 
-        public IActionResult PostNewShoppingCartItem(string? shoppingCartID, int productID, int? quantity)
+        public IActionResult PostShoppingCartItem(string? shoppingCartID, int productID, int? quantity)
         {
             try
             {
@@ -53,7 +53,7 @@ namespace AdventureWorksWebAPI.Controllers
                 ShoppingCartItem _item = new ShoppingCartItem()
                 {
                     ShoppingCartId = cartId,                   
-                    DateCreated = DateTime.Now,
+                   // DateCreated = DateTime.Now,
                     Quantity = itemQuantity,
                     ProductId = productID
                 };
