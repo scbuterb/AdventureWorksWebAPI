@@ -32,9 +32,9 @@ namespace AdventureWorksWebAPI.Controllers
             return shoppingCartItems == null ? NotFound() : Ok(shoppingCartItems);
         }
 
-        [HttpPost(Name = "ShoppingCartItem")]
-
-        public IActionResult PostShoppingCartItem(string? shoppingCartID, int productID, int? quantity)
+        [HttpPost]
+       [Route("")]
+        public IActionResult CreateShoppingCartItem(string? shoppingCartID, int productID, int? quantity)
         {
             try
             {
